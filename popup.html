@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="button.css">
+    <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <button id="changeColor"></button>
+    <div class="search-bar">
+      <label for="user-input">selector to kill:</label>
+      <form id="user-form">
+        <input id="user-input" type="text" />
+        <div class="radio-buttons">
+          <label for="class-name">
+            class
+            <input id="class-name" name="type" type="radio" />
+          </label>
+          <label for="id-name">
+            id
+            <input id="id-name" name="type" type="radio" />
+          </label>
+        </div>
+        <button id="submit-button">Submit</button>
+      </form>
+    </div>
+    <div class="options"></div>
     <script src="popup.js"></script>
-</body>
+  </body>
 </html>

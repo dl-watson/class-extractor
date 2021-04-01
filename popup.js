@@ -1,24 +1,30 @@
-// Initialize button with user's preferred color
-let changeColor = document.getElementById("changeColor");
+const form = document.getElementById("user-form");
+const input = document.getElementById("user-input");
 
-chrome.storage.sync.get("color", ({ color }) => {
-  changeColor.style.backgroundColor = color;
-});
+const classSelected = document.getElementById("class-name");
+const idSelected = document.getElementById("id-name");
 
-// When the button is clicked, inject setPageBackgroundColor into current page
-changeColor.addEventListener("click", async () => {
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const selector = input.value;
+
+  if (idSelected.checked) {
+    chrome.storage.sync.set({ selector: `#${selector}` });
+  } else {
+    chrome.storage.sync.set({ selector: `.${selector}` });
+  }
+
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    function: setPageBackgroundColor,
+    function: killSelector,
   });
 });
 
-// The body of this function will be executed as a content script inside the
-// current page
-function setPageBackgroundColor() {
-  chrome.storage.sync.get("color", ({ color }) => {
-    document.body.style.backgroundColor = color;
+function killSelector() {
+  chrome.storage.sync.get("selector", (obj) => {
+    const kill = document.querySelector(obj.selector);
+    kill.style.display = "none";
   });
 }
